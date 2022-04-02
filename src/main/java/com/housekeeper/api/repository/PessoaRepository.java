@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.housekeeper.api.model.Pessoa;
 
 @Repository
-public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+public interface PessoaRepository extends JpaRepository<Pessoa,Long>, PessoaRepositoryQuery {
+	
     
 }
