@@ -1,0 +1,630 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Este é um simples serviço para solicitação de serviços domésticos. \n",
+    "version" : "1.0",
+    "title" : "Swagger Housekeeper",
+    "termsOfService" : "http://swagger.io/terms/",
+    "contact" : {
+      "email" : "apiteam@swagger.io"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "agenda",
+    "description" : "Agenda de marcação de serviços"
+  }, {
+    "name" : "servicos",
+    "description" : "Operações dos serviços solicitados"
+  }, {
+    "name" : "usuario",
+    "description" : "Operações sobre o usuário"
+  } ],
+  "paths" : {
+    "/agenda" : {
+      "post" : {
+        "tags" : [ "agenda" ],
+        "summary" : "Add uma nova agenda de serviços disponíveis",
+        "operationId" : "addAgenda",
+        "consumes" : [ "application/json", "application/xml" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Objeto agenda que precisa ser adicionado no sistema",
+          "required" : true
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Entrada Inválida"
+          }
+        },
+        "security" : [ {
+          "petstore_auth" : [ "write:agendas", "read:agendas" ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "agenda" ],
+        "summary" : "Atualiza uma agenda disponível",
+        "operationId" : "updateAgenda",
+        "consumes" : [ "application/json", "application/xml" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Objeto agenda que precisa ser alterado no sistema",
+          "required" : true
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Id fornecido é inválido"
+          },
+          "404" : {
+            "description" : "Agenda não encontrada"
+          },
+          "405" : {
+            "description" : "Execeção de validação"
+          }
+        },
+        "security" : [ {
+          "petstore_auth" : [ "write:agendas", "read:agendas" ]
+        } ]
+      }
+    },
+    "/agenda/findByServico" : {
+      "get" : {
+        "tags" : [ "agenda" ],
+        "summary" : "Encontra agenda disonível por serviço",
+        "operationId" : "findAgendasByServico",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "tipoServico",
+          "in" : "query",
+          "description" : "Tipo de serviço que precisa ser buscado no filtro",
+          "required" : true,
+          "type" : "string",
+          "default" : "available"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "operação de sucesso"
+          },
+          "400" : {
+            "description" : "Serviço inválido"
+          }
+        },
+        "security" : [ {
+          "petstore_auth" : [ "write:agendas", "read:agendas" ]
+        } ]
+      }
+    },
+    "/agenda/findByPrestadorServico" : {
+      "get" : {
+        "tags" : [ "pet" ],
+        "summary" : "Busca agenda por prestador de serviço",
+        "description" : "Retorna uma lista de agendas disponíveis",
+        "operationId" : "findAgendasByPrestadorServico",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "query",
+          "description" : "Filtros por prestador",
+          "required" : true,
+          "type" : "string",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "operação de sucesso"
+          },
+          "400" : {
+            "description" : "Prestador inválido"
+          }
+        },
+        "security" : [ {
+          "petstore_auth" : [ "write:agendas", "read:agendas" ]
+        } ],
+        "deprecated" : true
+      }
+    },
+    "/agenda/{agendaId}" : {
+      "get" : {
+        "tags" : [ "agenda" ],
+        "summary" : "Encontra uma agenda por id",
+        "description" : "Retorna um objeto agenda",
+        "operationId" : "getAgendaById",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "agendaId",
+          "in" : "path",
+          "description" : "Id da agenda a ser retornada",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "operacao de sucesso"
+          },
+          "400" : {
+            "description" : "Id Inválido"
+          },
+          "404" : {
+            "description" : "Agenda não encontrada"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "agenda" ],
+        "summary" : "deleta uma agenda",
+        "operationId" : "deleteAgenda",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "api_key",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "agendaId",
+          "in" : "path",
+          "description" : "Id da agenda a ser deletada",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Id inválido"
+          },
+          "404" : {
+            "description" : "Agenda não encontrada"
+          }
+        },
+        "security" : [ {
+          "petstore_auth" : [ "write:pets", "read:pets" ]
+        } ]
+      }
+    },
+    "/servico" : {
+      "get" : {
+        "tags" : [ "servico" ],
+        "summary" : "Retorna os tipos de serviços disponíveis",
+        "description" : "Retorna todos os serviços cadastrados",
+        "operationId" : "getInventory",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "operação de sucesso",
+            "schema" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "integer",
+                "format" : "int32"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "servico" ],
+        "summary" : "Add um novo serviço ao sistema",
+        "operationId" : "addServico",
+        "consumes" : [ "application/json", "application/xml" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Objeto serviço que precisa ser adicionado no sistema",
+          "required" : true
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Entrada Inválida"
+          }
+        },
+        "security" : [ {
+          "petstore_auth" : [ "write:agendas", "read:agendas" ]
+        } ]
+      }
+    },
+    "/servico/findByNome" : {
+      "get" : {
+        "tags" : [ "servico" ],
+        "summary" : "Busca servico por nome",
+        "description" : "Retorna uma lista de tipo de serviços disponíveis",
+        "operationId" : "findServicoByName",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "query",
+          "description" : "Filtros por nome",
+          "required" : true,
+          "type" : "string",
+          "items" : {
+            "type" : "string"
+          },
+          "collectionFormat" : "multi"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "operação de sucesso"
+          },
+          "400" : {
+            "description" : "Nome inválido"
+          }
+        },
+        "security" : [ {
+          "petstore_auth" : [ "write:agendas", "read:agendas" ]
+        } ],
+        "deprecated" : true
+      }
+    },
+    "/servico/{servicoId}" : {
+      "get" : {
+        "tags" : [ "servico" ],
+        "summary" : "Encontra um serviço por id",
+        "description" : "Retorna um objeto servico",
+        "operationId" : "getServicoById",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "agendaId",
+          "in" : "path",
+          "description" : "Id do servico a ser retornado",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "operacao de sucesso"
+          },
+          "400" : {
+            "description" : "Id Inválido"
+          },
+          "404" : {
+            "description" : "Servico não encontrada"
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "servico" ],
+        "summary" : "Deleta serviço por Id",
+        "description" : "Para uma resposta válida, tente IDs inteiros com valor inteiro positivo",
+        "operationId" : "deleteServico",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "servicoId",
+          "in" : "path",
+          "description" : "Id do serviço precisa ser excluído",
+          "required" : true,
+          "type" : "integer",
+          "minimum" : 1.0,
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Id inválido"
+          },
+          "404" : {
+            "description" : "Serviço não encontrado"
+          }
+        }
+      }
+    },
+    "/usuario" : {
+      "post" : {
+        "tags" : [ "usuario" ],
+        "summary" : "Cria um usuário",
+        "description" : "Add um novo usuário ao sistema",
+        "operationId" : "createUsuario",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Objeto de usuario criado",
+          "required" : true
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "Operação de sucesso"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "usuario" ],
+        "summary" : "altera usuário",
+        "description" : "Isso só pode ser feito pelo usuário logado ou administrador.",
+        "operationId" : "updateUser",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "path",
+          "description" : "nome que precisa ser atualizado",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Objeto de usuário atualizado",
+          "required" : true
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Usuário inválido fornecido"
+          },
+          "404" : {
+            "description" : "Usuário não encontrado"
+          }
+        }
+      }
+    },
+    "/usuario/login" : {
+      "get" : {
+        "tags" : [ "usuario" ],
+        "summary" : "Faz o login do usuário no sistema",
+        "operationId" : "loginUser",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "query",
+          "description" : "O nome de usuário para login",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "password",
+          "in" : "query",
+          "description" : "A senha para login em texto criptografado",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Operação de sucesso",
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          "400" : {
+            "description" : "Nome de usuário/senha inválidos fornecidos"
+          }
+        }
+      }
+    },
+    "/usuario/logout" : {
+      "get" : {
+        "tags" : [ "usuario" ],
+        "summary" : "Desconecta a sessão de usuário conectada",
+        "operationId" : "logoutUser",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ ],
+        "responses" : {
+          "default" : {
+            "description" : "Operação de sucesso"
+          }
+        }
+      }
+    },
+    "/usuario/{nome}" : {
+      "get" : {
+        "tags" : [ "usuario" ],
+        "summary" : "Obter usuário por nome de usuário",
+        "operationId" : "getUserByName",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "path",
+          "description" : "O nome que precisa ser buscado.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Operação de sucesso"
+          },
+          "400" : {
+            "description" : "Nome de usuário inválido fornecido"
+          },
+          "404" : {
+            "description" : "Usuário não encontrado"
+          }
+        }
+      }
+    },
+    "/usuario/{id}" : {
+      "delete" : {
+        "tags" : [ "usuario" ],
+        "summary" : "Deleta usuário",
+        "description" : "Isso só pode ser feito pelo usuário logado ou administrador.",
+        "operationId" : "deleteUser",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "idUsuario",
+          "in" : "path",
+          "description" : "O id do usuário que precisa ser excluído",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Usuário inválido fornecido"
+          },
+          "404" : {
+            "description" : "Usuário não encontrado"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "api_key" : {
+      "type" : "apiKey",
+      "name" : "api_key",
+      "in" : "header"
+    }
+  },
+  "definitions" : {
+    "Servico" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "nome" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "xml" : {
+        "name" : "TipoServico"
+      }
+    },
+    "Agenda" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "dataServico" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "tipoServico" : {
+          "type" : "Servico",
+          "format" : "integer"
+        },
+        "valorServico" : {
+          "type" : "double"
+        },
+        "cliente" : {
+          "type" : "Usuario",
+          "format" : "integer"
+        },
+        "pretadorServico" : {
+          "type" : "Usuario",
+          "format" : "integer"
+        }
+      },
+      "xml" : {
+        "name" : "Agenda"
+      }
+    },
+    "Usuario" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "nome" : {
+          "type" : "string"
+        },
+        "senha" : {
+          "type" : "string"
+        },
+        "dataNascimento" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "telefone" : {
+          "type" : "string"
+        },
+        "endereco" : {
+          "type" : "Endereco",
+          "format" : "integer"
+        },
+        "perfil" : {
+          "type" : "Perfil",
+          "format" : "integer"
+        }
+      },
+      "xml" : {
+        "name" : "Usuario"
+      }
+    },
+    "Perfil" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "xml" : {
+        "name" : "Perfil"
+      }
+    },
+    "Endereco" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "cidade" : {
+          "type" : "string"
+        },
+        "rua" : {
+          "type" : "string"
+        },
+        "numero" : {
+          "type" : "integer"
+        },
+        "bairro" : {
+          "type" : "string"
+        },
+        "complemento" : {
+          "type" : "complemento"
+        }
+      },
+      "xml" : {
+        "name" : "Endereco"
+      }
+    },
+    "ApiResponse" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "message" : {
+          "type" : "string"
+        }
+      }
+    }
+  },
+  "externalDocs" : {
+    "description" : "Find out more about Swagger",
+    "url" : "http://swagger.io"
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/Housekeeper/HouseClean/1.0.0",
+  "schemes" : [ "https", "http" ]
+}
