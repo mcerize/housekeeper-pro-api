@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class HousekeeperApiProperty {
 
-	private String originPermitida = "http://127.0.0.1:4200";
-
+	private String originPermitida = "https://housekeeper-pro-angular.herokuapp.com";
+			//"https://housekeeper-pro-angular.herokuapp.com/";
+//http://127.0.0.1:4200,
 	private final Seguranca seguranca = new Seguranca();
 
 	public Seguranca getSeguranca() {
