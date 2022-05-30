@@ -1,18 +1,48 @@
 package com.housekeeper.api.model;
 
-import javax.persistence.Embeddable;
+import java.util.Objects;
 
-@Embeddable
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Entity
+@Table(name = "endereco")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Endereco {
     
-	private String logradouro;
-	private String numero;
-	private String complemento;
-	private String bairro;
-	private String cep;
-	private String cidade;
-	private String estado;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
+	private Long id;
 	
+	private String logradouro;
+	
+	private String numero;
+	
+	private String complemento;
+	
+	private String bairro;
+	
+	private String cep;
+	
+	private String cidade;
+	
+	private String estado;	
+		
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getLogradouro() {
 		return logradouro;
 	}
@@ -68,4 +98,23 @@ public class Endereco {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Endereco other = (Endereco) obj;
+		return Objects.equals(id, other.id);
+	}
+	
+	
 }

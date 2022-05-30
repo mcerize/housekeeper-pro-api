@@ -3,13 +3,15 @@ package com.housekeeper.api.config.property;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@ConfigurationProperties("algamoney")
+@ConfigurationProperties("housekeeper")
 @Component
 public class HousekeeperApiProperty {
 
-	private String originPermitida = "https://housekeeper-pro-angular.herokuapp.com";
-			//"https://housekeeper-pro-angular.herokuapp.com/";
-//http://127.0.0.1:4200,
+	private String originPermitida = "http://localhost:8000";
+	
+	//https://housekeeper-pro-angular.herokuapp.com
+	//http://127.0.0.1:4200
+
 	private final Seguranca seguranca = new Seguranca();
 
 	public Seguranca getSeguranca() {

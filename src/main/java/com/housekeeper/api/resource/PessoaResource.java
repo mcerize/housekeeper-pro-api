@@ -42,14 +42,14 @@ public class PessoaResource {
 		Pessoa pessoaSalva = pessoaRepository.save(pessoa);
 
 		// publisher.publishEvent(new RecursoCriadoEvent(this, response,
-		// pessoaSalva.getCodigo()));
+		// pessoaSalva.getId()));
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
 	}
 
-	@GetMapping("/{codigo}")
-	public ResponseEntity<Pessoa> buscarPeloCodigo(@PathVariable Long codigo) {
-		Optional<Pessoa> pessoa = pessoaRepository.findById(codigo);
+	@GetMapping("/{id}")
+	public ResponseEntity<Pessoa> buscarPeloId(@PathVariable Long id) {
+		Optional<Pessoa> pessoa = pessoaRepository.findById(id);
 		return pessoa.isPresent() ? ResponseEntity.ok(pessoa.get()) : ResponseEntity.notFound().build();
 	}
 
@@ -58,22 +58,22 @@ public class PessoaResource {
 		return pessoaRepository.filtrar(pageable);
 	}
 
-	@DeleteMapping("/{codigo}")
+	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable Long codigo) {
-		this.pessoaRepository.deleteById(codigo);
+	public void remover(@PathVariable Long id) {
+		this.pessoaRepository.deleteById(id);
 	}
 
-	@PutMapping("/{codigo}")
-	public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
-		Pessoa pessoaSalva = pessoaService.atualizar(codigo, pessoa);
+	@PutMapping("/{id}")
+	public ResponseEntity<Pessoa> atualizar(@PathVariable Long id, @Valid @RequestBody Pessoa pessoa) {
+		Pessoa pessoaSalva = pessoaService.atualizar(id, pessoa);
 		return ResponseEntity.ok(pessoaSalva);
 	}
 
-	@PutMapping("/{codigo}/ativo")
+	@PutMapping("/{id}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizarPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
-		pessoaService.atualizarPropriedadeAtivo(codigo, ativo);
+	public void atualizarPropriedadeAtivo(@PathVariable Long id, @RequestBody Boolean ativo) {
+		pessoaService.atualizarPropriedadeAtivo(id, ativo);
 	}
 
 }
