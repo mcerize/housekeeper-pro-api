@@ -2,8 +2,11 @@ package com.housekeeper.api.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AgendaDto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -12,9 +15,9 @@ public class AgendaDto implements Serializable {
 	
 	private TipoServicoDto tipoServico;
 	
-	private LocalDate dataServico;
+	private Date dataServico;
 	
-	private LocalDate dataServicoFim;
+	private Date dataServicoFim;
 	
 	private BigDecimal valorServico;
 	
@@ -23,6 +26,12 @@ public class AgendaDto implements Serializable {
 	private UsuarioDto cliente;
 	
 	private UsuarioDto prestadorServico;
+	
+	private String dataServicoFormatada;
+	
+	private String dataInicioServicoFormatada;
+	
+	private String dataFimServicoFormatada;
 
 	public Long getId() {
 		return id;
@@ -40,19 +49,19 @@ public class AgendaDto implements Serializable {
 		this.tipoServico = tipoServico;
 	}
 	
-	public LocalDate getDataServico() {
+	public Date getDataServico() {
 		return dataServico;
 	}
 
-	public void setDataServico(LocalDate dataServico) {
+	public void setDataServico(Date dataServico) {
 		this.dataServico = dataServico;
 	}
 
-	public LocalDate getDataServicoFim() {
+	public Date getDataServicoFim() {
 		return dataServicoFim;
 	}
 
-	public void setDataServicoFim(LocalDate dataServicoFim) {
+	public void setDataServicoFim(Date dataServicoFim) {
 		this.dataServicoFim = dataServicoFim;
 	}
 
@@ -88,4 +97,30 @@ public class AgendaDto implements Serializable {
 		this.prestadorServico = prestadorServico;
 	}
 
+	public String getDataServicoFormatada() {
+		return dataServicoFormatada;
+	}
+
+	public void setDataServicoFormatada(String dataServicoFormatada) {
+		this.dataServicoFormatada = dataServicoFormatada;
+	}
+
+	public String getDataInicioServicoFormatada() {
+		return dataInicioServicoFormatada;
+	}
+
+	public void setDataInicioServicoFormatada(String dataInicioServicoFormatada) {
+		this.dataInicioServicoFormatada = dataInicioServicoFormatada;
+	}
+
+	public String getDataFimServicoFormatada() {
+		return dataFimServicoFormatada;
+	}
+
+	public void setDataFimServicoFormatada(String dataFimServicoFormatada) {
+		this.dataFimServicoFormatada = dataFimServicoFormatada;
+	}
+	
+	
+	
 }

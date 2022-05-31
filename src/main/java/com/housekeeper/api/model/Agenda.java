@@ -1,7 +1,7 @@
 package com.housekeeper.api.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -11,10 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.housekeeper.api.dto.AgendaDto;
 
 @Entity
 @Table(name = "agenda")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Agenda {
 
 	@Id
@@ -23,10 +25,10 @@ public class Agenda {
 	private Long id;
 
 	@Column(name = "data_servico")
-	private LocalDate dataServico;
+	private Date dataServico;
 
 	@Column(name = "data_servico_fim")
-	private LocalDate dataServicoFim;
+	private Date dataServicoFim;
 
 	@Column(name = "id_tipo_servico")
 	private Long idTipoServico;
@@ -63,19 +65,19 @@ public class Agenda {
 		this.id = id;
 	}
 
-	public LocalDate getDataServico() {
+	public Date getDataServico() {
 		return dataServico;
 	}
 
-	public void setDataServico(LocalDate dataServico) {
+	public void setDataServico(Date dataServico) {
 		this.dataServico = dataServico;
 	}
 
-	public LocalDate getDataServicoFim() {
+	public Date getDataServicoFim() {
 		return dataServicoFim;
 	}
 
-	public void setDataServicoFim(LocalDate dataServicoFim) {
+	public void setDataServicoFim(Date dataServicoFim) {
 		this.dataServicoFim = dataServicoFim;
 	}
 

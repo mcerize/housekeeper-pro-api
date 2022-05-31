@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.housekeeper.api.dto.TipoServicoDto;
-import com.housekeeper.api.dto.UsuarioDto;
 import com.housekeeper.api.model.TipoServico;
-import com.housekeeper.api.model.Usuario;
 import com.housekeeper.api.repository.TipoServicoRepository;
 import com.housekeeper.api.service.TipoServicoService;
 

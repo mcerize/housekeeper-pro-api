@@ -1,6 +1,9 @@
 package com.housekeeper.api.resource;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,7 +81,16 @@ public class AgendaResource {
 		agendaDto.setCliente(agenda.getIdCliente() != null ? preencherUsuario(agenda.getIdCliente()) : null);
 		agendaDto.setValorServicoFormatado(
 				agendaDto.getValorServico() != null ? agendaDto.getValorServico().toString().replace(".", ",") : "");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+		agendaDto.setDataServicoFormatada(dateFormat.format(agenda.getDataServico()));
+		agendaDto.setDataInicioServicoFormatada(formatarDatasInicioFimExibicao(agenda.getDataServico()));
+		agendaDto.setDataFimServicoFormatada(formatarDatasInicioFimExibicao(agenda.getDataServicoFim()));
 		return agendaDto;
+	}
+	
+	private String formatarDatasInicioFimExibicao(Date data) {
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+		return dateFormat.format(data);		
 	}
 
 	private void preencherTipoServico(Agenda agenda, AgendaDto agendaDto) {
@@ -117,18 +129,26 @@ public class AgendaResource {
 		List<Agenda> agendas = agendaRepository.findAllByIdPrestadorServico(id);
 		return !agendas.isEmpty() ? ResponseEntity.ok(preencherAgendasDto(agendas)) : ResponseEntity.notFound().build();
 	}
+	
+	@GetMapping("/agenda-por-cliente/{id}")
+	public ResponseEntity<List<AgendaDto>> buscarPorCliente(@PathVariable Long id) {
+		List<Agenda> agendas = agendaRepository.findAllByIdCliente(id);
+		return !agendas.isEmpty() ? ResponseEntity.ok(preencherAgendasDto(agendas)) : ResponseEntity.notFound().build();
+	}
+
 
 	@GetMapping("/agenda-por-usuario-servico/{idUsuario}/{idTipoServico}")
-	public ResponseEntity<List<AgendaDto>> buscarPorUsuarioServico(@PathVariable Long idUsuario,
+	public ResponseEntity<List<AgendaDto>> buscarPorUsuarioServicoNaoAgendado(@PathVariable Long idUsuario,
 			@PathVariable Long idTipoServico) {
 		List<Agenda> agendas = agendaRepository.findAllByIdUsuarioIdPrestadorServico(idUsuario, idTipoServico);
 		return !agendas.isEmpty() ? ResponseEntity.ok(preencherAgendasDto(agendas)) : ResponseEntity.notFound().build();
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Agenda> atualizar(@PathVariable Long id, @Valid @RequestBody Agenda agenda) {
+	public ResponseEntity<AgendaDto> atualizar(@PathVariable Long id, @Valid @RequestBody AgendaDto agendaDto) {
+		Agenda agenda = new Agenda(agendaDto);
 		Agenda agendaSalva = agendaService.atualizar(id, agenda);
-		return ResponseEntity.ok(agendaSalva);
+		return ResponseEntity.ok(toAgendaDto(agendaSalva));
 	}
 
 	@DeleteMapping("/{id}")

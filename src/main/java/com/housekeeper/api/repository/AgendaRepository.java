@@ -14,7 +14,9 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
 	
 	List<Agenda> findAllByIdPrestadorServico(@Param("id") Long id);
 	
-	@Query("select a from Agenda a where a.idPrestadorServico = :idUsuario and a.idTipoServico = :idTipoServico")
+	List<Agenda> findAllByIdCliente(@Param("id") Long id);
+	
+	@Query("select a from Agenda a where a.idPrestadorServico = :idUsuario and a.idTipoServico = :idTipoServico and a.idCliente is null order by a.dataServico")
 	List<Agenda> findAllByIdUsuarioIdPrestadorServico(@Param("idUsuario") Long idUsuario, @Param("idTipoServico") Long idTipoServico);
 
 }
