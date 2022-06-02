@@ -14,7 +14,13 @@ import com.housekeeper.api.model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	public Optional<Usuario> findByEmail(String email);
 
+	@Query("select u from Usuario u  where u.email = :email and u.senha = :senha")
+	public Optional<Usuario> findByEmailSenha(String email, String senha);
+
 	@Query("select u from Usuario u join u.tipoServicos t where t.id = :id")
 	List<Usuario> findAllByTipoServicos(@Param("id") Long id);
-	
+
+	@Query("select u from Usuario u where (:nome is null or u.nome like %:nome%) and (:cpf is null or cpf like :cpf)")
+	public List<Usuario> findByExample(String nome, String cpf);
+
 }

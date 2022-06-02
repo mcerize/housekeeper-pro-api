@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,9 +38,9 @@ public class UsuarioResource {
 	@Autowired
 	private UsuarioService usuarioService;
 
+
 	@PostMapping
 	public ResponseEntity<Usuario> criar(@Valid @RequestBody Usuario usuario, HttpServletResponse response) {
-		
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
 	}
@@ -58,6 +59,35 @@ public class UsuarioResource {
 			usuariosDto.add(usuarioDto);
 		});
 		return usuariosDto;
+	}
+
+	@GetMapping("/{nome}/{cpf}")
+	public ResponseEntity<List<UsuarioDto>> buscarPorCamposPreenchidos(@PathVariable String nome,
+			@PathVariable String cpf) {
+		List<Usuario> usuarios = new ArrayList<>();
+		if (nome.equals("undefined")) {
+			nome = null;
+		}
+		if (cpf.equals("undefined")) {
+			cpf = null;
+		} else if(StringUtils.isNotBlank(cpf)) {
+			cpf = cpf.replace(".", "");
+			cpf = cpf.replace("-", "");
+			
+		}
+		if ((!StringUtils.isNotBlank(nome) && !StringUtils.isNotBlank(cpf))) {
+			usuarios = usuarioRepository.findAll();
+		} else {
+			usuarios = usuarioRepository.findByExample(nome, cpf);
+		}
+		return !usuarios.isEmpty() ? ResponseEntity.ok(preencherUsuariosDto(usuarios))
+				: ResponseEntity.notFound().build();
+	}
+
+	@PostMapping("/usuario-logado")
+	public ResponseEntity<UsuarioDto> buscarPorEmailSenha(@RequestBody UsuarioDto usuarioDto) {
+		Optional<Usuario> usuario = usuarioRepository.findByEmailSenha(usuarioDto.getEmail(), usuarioDto.getSenha());
+		return usuario.isPresent() ? ResponseEntity.ok(toUsuarioDto(usuario.get())) : ResponseEntity.notFound().build();
 	}
 
 	@GetMapping("/{id}")
@@ -80,14 +110,14 @@ public class UsuarioResource {
 		usuarioDto.setTipoServicos(tipoServicosDto);
 		return usuarioDto;
 	}
-	
+
 	@GetMapping("/tiposServicos/{id}")
 	public ResponseEntity<List<UsuarioDto>> findAllByTipoServicos(@PathVariable Long id) {
 		List<Usuario> usuarios = usuarioRepository.findAllByTipoServicos(id);
 		return !usuarios.isEmpty() ? ResponseEntity.ok(preencherUsuariosDto(usuarios))
 				: ResponseEntity.notFound().build();
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
 		Usuario usuarioSalva = usuarioService.atualizar(id, usuario);
