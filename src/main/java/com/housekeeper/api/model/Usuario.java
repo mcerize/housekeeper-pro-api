@@ -45,7 +45,7 @@ public class Usuario {
 	@JoinColumn(name = "id_perfil")
 	private Perfil perfil;
 
-	private String email;
+	private String email; 
 
 	private String senha;
 
